@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode"
 
-	u "github.com/fcavani/util/unicode"
+	u "github.com/fcavani/unicode"
 	"github.com/fcavani/e"
 )
 
