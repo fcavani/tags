@@ -11,8 +11,9 @@ import (
 	"strings"
 	"unicode"
 
-	u "github.com/fcavani/unicode"
 	"github.com/fcavani/e"
+	u "github.com/fcavani/unicode"
+	"github.com/fcavani/types"
 )
 
 var TagStringMax = 3000
@@ -27,6 +28,10 @@ const ErrInvalidTagsLength = "list of tags is big"
 const ErrInvalidTagChar = "invalid tag character"
 
 type Tags []string
+
+func init() {
+	types.Insert(&Tags{})
+}
 
 // NewTags creates a new tag list from a comma separeted list of tags.
 func NewTags(tags string) (*Tags, error) {
