@@ -12,8 +12,8 @@ import (
 	"unicode"
 
 	"github.com/fcavani/e"
-	u "github.com/fcavani/unicode"
 	"github.com/fcavani/types"
+	u "github.com/fcavani/unicode"
 )
 
 var TagStringMax = 3000
@@ -35,6 +35,9 @@ func init() {
 
 // NewTags creates a new tag list from a comma separeted list of tags.
 func NewTags(tags string) (*Tags, error) {
+	if tags == "" {
+		return &Tags{}, nil
+	}
 	if err := CheckTags(tags); err != nil {
 		return nil, e.Forward(err)
 	}
@@ -112,6 +115,10 @@ func (t *Tags) Add(tag string) error {
 
 // Replace all tags with new tags in the string, that is formated in a comma separated list.
 func (t *Tags) Replace(s string) error {
+	if s == "" {
+		*t = Tags{}
+		return nil
+	}
 	if err := CheckTags(s); err != nil {
 		return e.Forward(err)
 	}
