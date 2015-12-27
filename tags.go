@@ -117,8 +117,8 @@ func (t *Tags) Add(tag string) error {
 // Replace all tags with new tags in the string, that is formated in a comma separated list.
 func (t *Tags) Replace(s string) error {
 	if s == "" {
-		empty := make(Tags, 0)
-		return &empty, nil
+		*t = Tags{}
+		return nil
 	}
 	if err := CheckTags(s); err != nil {
 		return e.Forward(err)
