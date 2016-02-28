@@ -14,6 +14,7 @@ import (
 	"github.com/fcavani/e"
 	"github.com/fcavani/types"
 	u "github.com/fcavani/unicode"
+	"gopkg.in/vmihailenco/msgpack.v2"
 )
 
 var TagStringMax = 3000
@@ -234,6 +235,37 @@ func (t *Tags) Swap(i, j int) {
 	a := *t
 	a[i], a[j] = a[j], a[i]
 	*t = a
+}
+
+func (t *Tags) EncodeMsgpack(enc *msgpack.Encoder) error {
+	a := *t
+	err := enc.EncodeSliceLen(len(a))
+	if err != nil {
+		return e.Forward(err)
+	}
+	for _, l := range a {
+		err = enc.EncodeString(l)
+		if err != nil {
+			return e.Forward(err)
+		}
+	}
+	return nil
+}
+
+func (t *Tags) DecodeMsgpack(dec *msgpack.Decoder) error {
+	l, err := dec.DecodeSliceLen()
+	if err != nil {
+		return e.Forward(err)
+	}
+	as := make([]string, l)
+	for i := 0; i < l; i++ {
+		as[i], err = dec.DecodeString()
+		if err != nil {
+			return e.Forward(err)
+		}
+	}
+	*t = Tags(as)
+	return nil
 }
 
 // Check if a set of tags are correctly formated.
